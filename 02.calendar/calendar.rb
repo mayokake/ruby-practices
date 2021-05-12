@@ -22,9 +22,9 @@ class YearMonth
 
   def month
     if @options[:m] != nil
-       @options[:m].to_i
+      @options[:m].to_i
     else
-       Date.today.month
+      Date.today.month
     end
   end
 end
