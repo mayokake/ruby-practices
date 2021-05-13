@@ -29,11 +29,11 @@ class CalReady
   end
 
   def first_day
-    first_day = Date.new(@year, @month, 1)
+    Date.new(@year, @month, 1)
   end
 
   def last_day
-    last_day = Date.new(@year, @month, -1)
+    Date.new(@year, @month, -1)
   end
 
   def calendar_output
