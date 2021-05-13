@@ -13,19 +13,11 @@ class YearMonth
   end
 
   def year
-    if @options[:y] != nil
-      @options[:y].to_i
-    else
-      Date.today.year
-    end
+    @options[:y]&.to_i || Date.today.year
   end
 
   def month
-    if @options[:m] != nil
-      @options[:m].to_i
-    else
-      Date.today.month
-    end
+    @options[:m]&.to_i || Date.today.month
   end
 end
 
@@ -44,30 +36,15 @@ class CalReady
     last_day = Date.new(@year, @month, -1)
   end
 
-  def calendar_range
-    rng = []
-    (first_day..last_day).each {|d| rng << d.to_s}
-  end
-
-  def margin
-    margin = first_day.wday
-  end
-
-  def final_day
-    last_day.day
-  end
-
-  def make_calendar
+  def calendar_output
     puts ("#{@month}月 #{@year}").center(20)
     puts "日 月 火 水 木 金 土"
-    print " " * 3 * margin
-    temp = []
-    cal = calendar_range.each {|d| temp << d.to_s}
-    cal.each do |element|
-      if element.saturday? || element.day == final_day
-        print element.day.to_s.rjust(2) + " "+ "\n"
+    print " " * 3 * first_day.wday
+    (first_day..last_day).each do |date|
+      if date.saturday? || date == last_day
+        print date.day.to_s.rjust(2) + " "+ "\n"
       elsif
-        print element.day.to_s.rjust(2) + " "
+        print date.day.to_s.rjust(2) + " "
       end
     end
   end
@@ -80,4 +57,4 @@ year = arguments.year
 month = arguments.month
 # カレンダー作成
 calendar = CalReady.new(year, month)
-calendar.make_calendar
+calendar.calendar_output
