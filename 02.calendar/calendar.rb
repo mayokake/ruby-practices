@@ -50,7 +50,7 @@ class CalReady
   end
 
   def margin
-    margin = first_day.wday % 7
+    margin = first_day.wday
   end
 
   def final_day
