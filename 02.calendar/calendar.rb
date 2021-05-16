@@ -36,7 +36,7 @@ class CalReady
     Date.new(@year, @month, -1)
   end
 
-  def calendar_output
+  def output_calendar
     puts ("#{@month}月 #{@year}").center(20)
     puts "日 月 火 水 木 金 土"
     print " " * 3 * first_day.wday
@@ -57,4 +57,4 @@ year = arguments.year
 month = arguments.month
 # カレンダー作成
 calendar = CalReady.new(year, month)
-calendar.calendar_output
+calendar.output_calendar
