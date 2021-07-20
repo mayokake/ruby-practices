@@ -1,3 +1,4 @@
+#!/Users/masataka_ikeda/.rbenv/versions/3.0.1/bin/ruby
 # frozen_string_literal: true
 
 # calculation of your bowling score
