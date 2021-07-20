@@ -1,67 +1,54 @@
-#!/Users/masataka_ikeda/.rbenv/versions/3.0.1/bin/ruby
 # frozen_string_literal: true
 
+# calculation of your bowling score
 class Bowling
+  def self.calc_points(score)
+    my_score = Bowling.new(score)
+    my_score.total_points
+  end
+
   def initialize(score)
-    @score = score
+    @scores = score[0].split(',').flat_map { |s| s == 'X' ? [10, 0] : s.to_i }
+    @basic_score = @scores.each_slice(2).to_a
   end
 
-  def scores
-    @score[0].split(',')
+  def total_points
+    @scores.sum + points_of_strikes + points_of_spares
   end
 
-  def basic_scores
-    shots = []
-    scores.each { |sc| sc == 'X' ? shots.push(10, 0) : shots.push(sc.to_i) }
-    shots
+  def points_of_strikes
+    ary_for_strike_points.sum
   end
 
-  def array_for_spare
-    spares = []
-    basic_scores.each_slice(2) { |s| spares.push(s) }
-    spares
+  def points_of_spares
+    numbers_for_spare_calc.sum { |n| n < 9 ? @basic_score[n + 1][0] : 0 }
   end
 
-  def spare_frames
-    s_frames = []
-    array_for_spare.each_index do |index|
-      s_frames.push(index) if array_for_spare[index].sum == 10 && array_for_spare[index][1] != 0
+  private
+
+  def numbers_for_strike_calc
+    @basic_score.filter_map.with_index do |frame, index|
+      condition_for_strike_calc = frame[0] == 10 && index < 9
+      index if condition_for_strike_calc
     end
-    s_frames
   end
 
-  def points_in_spares
-    spare_score = 0
-    spare_frames.each { |n| spare_score += array_for_spare[n + 1][0] if n != 9 }
-    spare_score
-  end
-
-  def array_for_strike
-    shots_for_strike = []
-    scores.each { |s| s == 'X' ? shots_for_strike.push(10) : shots_for_strike.push(s.to_i) }
-    shots_for_strike
-  end
-
-  def strikes
-    scores.each_index.select { |i| scores[i] == 'X' }
-  end
-
-  def point(str)
-    array_for_strike[str]
-  end
-
-  def strike_points_extra(strx)
-    point(strx + 1) + point(strx + 2)
-  end
-
-  def score_in_strike
-    points_strike = 0
-    strikes.each do |num|
-      points_strike += strike_points_extra(num) if !point(num + 2).nil? && !point(num + 3).nil?
+  def ary_for_strike_points
+    numbers_for_strike_calc.map! do |index|
+      if @basic_score[index + 1][0] == 10
+        10 + @basic_score[index + 2][0]
+      else
+        @basic_score[index + 1].sum
+      end
     end
-    points_strike
+  end
+
+  def numbers_for_spare_calc
+    @basic_score.filter_map.with_index do |frame, index|
+      condition_for_spare_calc = frame.sum == 10 && frame[1] != 0
+      index if condition_for_spare_calc
+    end
   end
 end
 
-my_score = Bowling.new(ARGV)
-p my_score.basic_scores.sum + my_score.points_in_spares + my_score.score_in_strike
+p Bowling.calc_points(ARGV)
