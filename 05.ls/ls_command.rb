@@ -1,11 +1,8 @@
+#!/Users/masataka_ikeda/.rbenv/versions/3.0.1/bin/ruby
 # frozen_string_literal: true
 
 require 'etc'
 require 'optparse'
-
-# Dir.chdir('/usr/bin')
-# Dir.chdir('/usr/sbin')
-# Dir.chdir("/Users/masataka_ikeda")
 
 parameter = ARGV.getopts('lar')
 l_option = parameter['l']
@@ -15,7 +12,6 @@ array_for_stat = array_for_ar_option.map do |string|
   File.lstat(string).ftype == 'link' ? File.lstat(string) : File.stat(string)
 end
 block_number = array_for_stat.map(&:blocks).sum
-
 
 class ArrayWithoutLongOption
   COLUMNS = 3
@@ -121,7 +117,7 @@ class ModeAndPermission
     arr_atribute << file_mode_owner(file)
     arr_atribute << file_mode_group(file)
     arr_atribute << file_mode_other(file)
-    arr_atribute.join.ljust(11)
+    arr_atribute.join
   end
 end
 
@@ -245,9 +241,9 @@ def output_display(array)
   array.each do |file|
     file.each.with_index do |element, index|
       if file.size == index + 1
-        print "#{element}\n"
+        print "#{element} \n"
       else
-        print element
+        print "#{element} "
       end
     end
   end
