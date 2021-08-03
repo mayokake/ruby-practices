@@ -5,7 +5,7 @@ require 'etc'
 require 'optparse'
 
 # Dir.chdir('/usr/bin')
-# Dir.chdir('/usr/sbin')
+Dir.chdir('/usr/sbin')
 # Dir.chdir("/Users/masataka_ikeda")
 
 parameter = ARGV.getopts('lar')
@@ -49,11 +49,11 @@ end
 
 class ModeAndPermission
   HASH1 = { 'file' => '-', 'directory' => 'd', 'characterSpecial' => 'c', 'blockSpecial' => 'b',
-  'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }
+            'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }.freeze
   HASH2 = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x',
-  '0' => '---' }
+            '0' => '---' }.freeze
   HASH3 = { '7' => 'rws', '6' => 'rwS', '5' => 'r-s', '4' => 'r-S', '3' => '-ws', '2' => '-wS', '1' => '--s',
-  '0' => '--S' }
+            '0' => '--S' }.freeze
 
   def self.my_file_permission(array)
     my_file_permission = ModeAndPermission.new(array)
@@ -224,7 +224,7 @@ def output_display(array)
   array.each do |file|
     file.each.with_index do |element, index|
       if file.size == index + 1
-        puts "#{element}"
+        puts element.to_s
       else
         print "#{element} "
       end
@@ -232,24 +232,24 @@ def output_display(array)
   end
 end
 
+# def display(array1, array2, option, block)
+#   if option
+#     puts "total #{block}"
+#     output_display(array2)
+#   else
+#     output_display(array1)
+#   end
+# end
+
 def display(array1, array2, option, block)
   if option
+    array_with_l = ArrayWithLongOption.transposed_array(array1, array2)
     puts "total #{block}"
-    output_display(array2)
+    output_display(array_with_l)
   else
-    output_display(array1)
+    array_without_l = ArrayWithoutLongOption.transposed_array(array1)
+    output_display(array_without_l)
   end
 end
 
-def display2(array1, array2, option, block)
-  if option
-    test11 = ArrayWithLongOption.transposed_array(array1, array2)
-    puts "total #{block}"
-    output_display(test11)
-  else
-    test22 = ArrayWithoutLongOption.transposed_array(array1)
-    output_display(test22)    
-  end
-end
-
-display2(array_for_ar_option, array_for_stat, l_option, block_number)
+display(array_for_ar_option, array_for_stat, l_option, block_number)
