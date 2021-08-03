@@ -5,7 +5,7 @@ require 'etc'
 require 'optparse'
 
 # Dir.chdir('/usr/bin')
-Dir.chdir('/usr/sbin')
+# Dir.chdir('/usr/sbin')
 # Dir.chdir("/Users/masataka_ikeda")
 
 parameter = ARGV.getopts('lar')
@@ -126,41 +126,9 @@ class ModeAndPermission
   end
 end
 
-# class Uid
-#   def self.uid_information(array)
-#     uid = Uid.new(array)
-#     uid.uid_information
-#   end
-
-#   def uid_information
-#     width_uid = @array.map { |stat| Etc.getpwuid(stat.uid).name.size }.max
-#     @array.map { |stat| Etc.getpwuid(stat.uid).name.rjust(width_uid) }
-#   end
-
-#   def initialize(array)
-#     @array = array
-#   end
-# end
-
-# class Gid
-#   def self.gid_information(array)
-#     gid = Gid.new(array)
-#     gid.gid_information
-#   end
-
-#   def gid_information
-#     width_gid = @array.map { |stat| Etc.getgrgid(stat.gid).name.size }.max
-#     @array.map { |stat| Etc.getgrgid(stat.gid).name.rjust(width_gid) }
-#   end
-
-#   def initialize(array)
-#     @array = array
-#   end
-# end
-
-class DateObject
+class DateFormatter
   def self.date_object(array)
-    date_object = DateObject.new(array)
+    date_object = DateFormatter.new(array)
     date_object.date_object
   end
 
@@ -242,12 +210,10 @@ class ArrayWithLongOption
     matrix = []
     matrix << ModeAndPermission.my_file_permission(@array2)
     matrix << link
-    # matrix << Uid.uid_information(@array2)
     matrix << uid
     matrix << gid
-    # matrix << Gid.gid_information(@array2)
     matrix << size
-    matrix << DateObject.date_object(@array2)
+    matrix << DateFormatter.date_object(@array2)
     matrix << @array1
     matrix << symbolic_link
     matrix
@@ -274,9 +240,6 @@ def display(array1, array2, option, block)
     output_display(array1)
   end
 end
-
-# array_without_l_option = ArrayWithoutLongOption.transposed_array(array_for_ar_option)
-# array_with_l_option = ArrayWithLongOption.transposed_array(array_for_ar_option, array_for_stat)
 
 def display2(array1, array2, option, block)
   if option
