@@ -4,6 +4,10 @@
 require 'etc'
 require 'optparse'
 
+# Dir.chdir('/usr/bin')
+Dir.chdir('/usr/sbin')
+# Dir.chdir("/Users/masataka_ikeda")
+
 parameter = ARGV.getopts('lar')
 l_option = parameter['l']
 array_for_a_option = parameter['a'] ? Dir.glob('*', File::FNM_DOTMATCH) : Dir.glob('*')
@@ -44,6 +48,13 @@ class ArrayWithoutLongOption
 end
 
 class ModeAndPermission
+  HASH1 = { 'file' => '-', 'directory' => 'd', 'characterSpecial' => 'c', 'blockSpecial' => 'b',
+  'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }
+  HASH2 = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x',
+  '0' => '---' }
+  HASH3 = { '7' => 'rws', '6' => 'rwS', '5' => 'r-s', '4' => 'r-S', '3' => '-ws', '2' => '-wS', '1' => '--s',
+  '0' => '--S' }
+
   def self.my_file_permission(array)
     my_file_permission = ModeAndPermission.new(array)
     my_file_permission.file_and_permission
@@ -51,12 +62,6 @@ class ModeAndPermission
 
   def initialize(array1)
     @array1 = array1
-    @hash1 = { 'file' => '-', 'directory' => 'd', 'characterSpecial' => 'c', 'blockSpecial' => 'b',
-               'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }
-    @hash2 = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x',
-               '0' => '---' }
-    @hash3 = { '7' => 'rws', '6' => 'rwS', '5' => 'r-s', '4' => 'r-S', '3' => '-ws', '2' => '-wS', '1' => '--s',
-               '0' => '--S' }
   end
 
   def file_and_permission
@@ -68,15 +73,15 @@ class ModeAndPermission
   private
 
   def file_type(file)
-    @hash1[file.ftype]
+    HASH1[file.ftype]
   end
 
   def rwx(number)
-    @hash2[number]
+    HASH2[number]
   end
 
   def id(number)
-    @hash3[number]
+    HASH3[number]
   end
 
   def file_mode_owner(file)
@@ -121,37 +126,37 @@ class ModeAndPermission
   end
 end
 
-class Uid
-  def self.uid_information(array)
-    uid = Uid.new(array)
-    uid.uid_information
-  end
+# class Uid
+#   def self.uid_information(array)
+#     uid = Uid.new(array)
+#     uid.uid_information
+#   end
 
-  def uid_information
-    width_uid = @array.map { |stat| Etc.getpwuid(stat.uid).name.size }.max
-    @array.map { |stat| Etc.getpwuid(stat.uid).name.rjust(width_uid) }
-  end
+#   def uid_information
+#     width_uid = @array.map { |stat| Etc.getpwuid(stat.uid).name.size }.max
+#     @array.map { |stat| Etc.getpwuid(stat.uid).name.rjust(width_uid) }
+#   end
 
-  def initialize(array)
-    @array = array
-  end
-end
+#   def initialize(array)
+#     @array = array
+#   end
+# end
 
-class Gid
-  def self.gid_information(array)
-    gid = Gid.new(array)
-    gid.gid_information
-  end
+# class Gid
+#   def self.gid_information(array)
+#     gid = Gid.new(array)
+#     gid.gid_information
+#   end
 
-  def gid_information
-    width_gid = @array.map { |stat| Etc.getgrgid(stat.gid).name.size }.max
-    @array.map { |stat| Etc.getgrgid(stat.gid).name.rjust(width_gid) }
-  end
+#   def gid_information
+#     width_gid = @array.map { |stat| Etc.getgrgid(stat.gid).name.size }.max
+#     @array.map { |stat| Etc.getgrgid(stat.gid).name.rjust(width_gid) }
+#   end
 
-  def initialize(array)
-    @array = array
-  end
-end
+#   def initialize(array)
+#     @array = array
+#   end
+# end
 
 class DateObject
   def self.date_object(array)
@@ -213,6 +218,16 @@ class ArrayWithLongOption
     @array2.map { |stat| stat.nlink.to_s.rjust(4) }
   end
 
+  def uid
+    width_uid = @array2.map { |stat| Etc.getpwuid(stat.uid).name.size }.max
+    @array2.map { |stat| Etc.getpwuid(stat.uid).name.rjust(width_uid) }
+  end
+
+  def gid
+    width_gid = @array2.map { |stat| Etc.getgrgid(stat.gid).name.size }.max
+    @array2.map { |stat| Etc.getgrgid(stat.gid).name.rjust(width_gid) }
+  end
+
   def size
     @array2.map { |stat| stat.size.to_s.rjust(9) }
   end
@@ -227,8 +242,10 @@ class ArrayWithLongOption
     matrix = []
     matrix << ModeAndPermission.my_file_permission(@array2)
     matrix << link
-    matrix << Uid.uid_information(@array2)
-    matrix << Gid.gid_information(@array2)
+    # matrix << Uid.uid_information(@array2)
+    matrix << uid
+    matrix << gid
+    # matrix << Gid.gid_information(@array2)
     matrix << size
     matrix << DateObject.date_object(@array2)
     matrix << @array1
@@ -241,7 +258,7 @@ def output_display(array)
   array.each do |file|
     file.each.with_index do |element, index|
       if file.size == index + 1
-        print "#{element} \n"
+        puts "#{element}"
       else
         print "#{element} "
       end
@@ -258,7 +275,18 @@ def display(array1, array2, option, block)
   end
 end
 
-array_without_l_option = ArrayWithoutLongOption.transposed_array(array_for_ar_option)
-array_with_l_option = ArrayWithLongOption.transposed_array(array_for_ar_option, array_for_stat)
+# array_without_l_option = ArrayWithoutLongOption.transposed_array(array_for_ar_option)
+# array_with_l_option = ArrayWithLongOption.transposed_array(array_for_ar_option, array_for_stat)
 
-display(array_without_l_option, array_with_l_option, l_option, block_number)
+def display2(array1, array2, option, block)
+  if option
+    test11 = ArrayWithLongOption.transposed_array(array1, array2)
+    puts "total #{block}"
+    output_display(test11)
+  else
+    test22 = ArrayWithoutLongOption.transposed_array(array1)
+    output_display(test22)    
+  end
+end
+
+display2(array_for_ar_option, array_for_stat, l_option, block_number)
