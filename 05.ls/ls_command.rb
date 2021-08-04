@@ -44,11 +44,11 @@ class ArrayWithoutLongOption
 end
 
 class ModeAndPermission
-  HASH1 = { 'file' => '-', 'directory' => 'd', 'characterSpecial' => 'c', 'blockSpecial' => 'b',
+  FILE_TYPE = { 'file' => '-', 'directory' => 'd', 'characterSpecial' => 'c', 'blockSpecial' => 'b',
             'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }.freeze
-  HASH2 = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x',
+  FILE_PERMISSION = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x',
             '0' => '---' }.freeze
-  HASH3 = { '7' => 'rws', '6' => 'rwS', '5' => 'r-s', '4' => 'r-S', '3' => '-ws', '2' => '-wS', '1' => '--s',
+  SPECIAL_PERMISSION = { '7' => 'rws', '6' => 'rwS', '5' => 'r-s', '4' => 'r-S', '3' => '-ws', '2' => '-wS', '1' => '--s',
             '0' => '--S' }.freeze
 
   def self.my_file_permission(array)
@@ -69,15 +69,15 @@ class ModeAndPermission
   private
 
   def file_type(file)
-    HASH1[file.ftype]
+    FILE_TYPE[file.ftype]
   end
 
   def rwx(number)
-    HASH2[number]
+    FILE_PERMISSION[number]
   end
 
   def id(number)
-    HASH3[number]
+    SPECIAL_PERMISSION[number]
   end
 
   def file_mode_owner(file)
@@ -228,13 +228,13 @@ def output_display(array)
   end
 end
 
-def display(array1, array2, option, block)
-  if option
-    array_with_l = ArrayWithLongOption.transposed_array(array1, array2)
-    puts "total #{block}"
+def display(array_ar, array_stat, l_option, block_number)
+  if l_option
+    array_with_l = ArrayWithLongOption.transposed_array(array_ar, array_stat)
+    puts "total #{block_number}"
     output_display(array_with_l)
   else
-    array_without_l = ArrayWithoutLongOption.transposed_array(array1)
+    array_without_l = ArrayWithoutLongOption.transposed_array(array_ar)
     output_display(array_without_l)
   end
 end
