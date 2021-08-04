@@ -1,4 +1,3 @@
-#!/Users/masataka_ikeda/.rbenv/versions/3.0.1/bin/ruby
 # frozen_string_literal: true
 
 require 'optparse'
@@ -8,7 +7,6 @@ l_option = parameter['l']
 files = Dir.glob('*').filter_map { |string| string if File.stat(string).ftype == 'file' }
 files_from_argument = ARGV.select { |string| files.include?(string) }
 
-# word count command assignment
 class WordCount
   def self.full_information(array)
     word_count = WordCount.new(array)
@@ -71,7 +69,7 @@ class WordCount
   end
 
   def words(string)
-    string.split(/\s/).reject(&:empty?).size
+    string.split(/\s/).count { |item| item.empty? != true }
   end
 
   def bytes(string)
@@ -99,7 +97,6 @@ class WordCount
   end
 end
 
-# word count from input
 class WordCountFromInput
   def self.full_from_input(input)
     word_count_from_input = WordCountFromInput.new(input)
@@ -129,7 +126,7 @@ class WordCountFromInput
   private
 
   def word
-    @input.split(/\s/).reject(&:empty?).size
+    @input.split(/\s/).count { |item| item.empty? != true }
   end
 
   def byte
