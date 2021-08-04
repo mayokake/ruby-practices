@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+#!/Users/masataka_ikeda/.rbenv/versions/3.0.1/bin/ruby
 
 require 'optparse'
 
