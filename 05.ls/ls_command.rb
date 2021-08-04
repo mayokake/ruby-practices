@@ -45,11 +45,11 @@ end
 
 class ModeAndPermission
   FILE_TYPE = { 'file' => '-', 'directory' => 'd', 'characterSpecial' => 'c', 'blockSpecial' => 'b',
-            'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }.freeze
+                'fifo' => 'p', 'link' => 'l', 'socket' => 's', 'unknown' => '?' }.freeze
   FILE_PERMISSION = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x',
-            '0' => '---' }.freeze
+                      '0' => '---' }.freeze
   SPECIAL_PERMISSION = { '7' => 'rws', '6' => 'rwS', '5' => 'r-s', '4' => 'r-S', '3' => '-ws', '2' => '-wS', '1' => '--s',
-            '0' => '--S' }.freeze
+                         '0' => '--S' }.freeze
 
   def self.my_file_permission(array)
     my_file_permission = ModeAndPermission.new(array)
