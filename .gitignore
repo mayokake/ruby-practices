@@ -15,6 +15,7 @@
 /tmp/
 *.code-workspace
 .gitkeep
+.gitignore
 
 # Used by dotenv library to load environment variables.
 # .env
