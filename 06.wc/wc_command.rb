@@ -120,11 +120,11 @@ class WordCountFromInput
     @input = input
   end
 
+  private
+
   def line
     @input.count("\n")
   end
-
-  private
 
   def word
     @input.split(/\s/).count { |item| item.empty? != true }
