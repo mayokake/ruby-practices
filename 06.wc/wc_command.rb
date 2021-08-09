@@ -27,7 +27,7 @@ class WordCount
   def full_information
     @array_file_read.each.with_index do |string, i|
       merge_information(string)
-      puts " #{file_name(@array[i])}"
+      puts " " + @array[i]
     end
     total if @array_file_read.size != 1
   end
@@ -35,7 +35,7 @@ class WordCount
   def lines_only
     @array_file_read.each.with_index do |string, i|
       only_lines(string)
-      puts " #{file_name(@array[i])}"
+      puts " " + @array[i]
     end
     total_lines_only if @array_file_read.size != 1
   end
@@ -59,10 +59,6 @@ class WordCount
   def total_lines_only
     lines = lines_number_sum.to_s.rjust(8)
     puts "#{lines} total"
-  end
-
-  def file_name(string)
-    string
   end
 
   def lines_number(string)
