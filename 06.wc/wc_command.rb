@@ -95,25 +95,26 @@ class WordCount
 end
 
 class WordCountFromInput
-  def self.full_from_input(input)
-    word_count_from_input = WordCountFromInput.new(input)
+  def self.full_from_input(input, option)
+    word_count_from_input = WordCountFromInput.new(input, option)
     word_count_from_input.full_from_input
   end
 
-  def self.line(input)
-    word_count_from_input2 = WordCountFromInput.new(input)
-    puts word_count_from_input2.line.to_s.rjust(8)
-  end
-
   def full_from_input
-    lines = line.to_s.rjust(8)
-    words = word.to_s.rjust(8)
-    bytes = byte.to_s.rjust(8)
-    puts "#{lines}#{words}#{bytes}"
+    if @option == true
+      lines = line.to_s.rjust(8)
+      puts "#{lines}"
+    else
+      lines = line.to_s.rjust(8)
+      words = word.to_s.rjust(8)
+      bytes = byte.to_s.rjust(8)
+      puts "#{lines}#{words}#{bytes}"
+    end
   end
 
-  def initialize(input)
+  def initialize(input, option)
     @input = input
+    @option = option
   end
 
   private
@@ -131,14 +132,18 @@ class WordCountFromInput
   end
 end
 
-if files_from_argument.empty? && l_option == false
-  input = $stdin.read
-  WordCountFromInput.full_from_input(input)
-elsif files_from_argument.empty? && l_option == true
-  input = $stdin.read
-  WordCountFromInput.line(input)
-elsif files_from_argument.empty? == false && l_option == false
-  WordCount.full_information(files_from_argument)
-else
-  WordCount.lines_only(files_from_argument)
-end
+# if files_from_argument.empty? && l_option == false
+#   input = $stdin.read
+#   WordCountFromInput.full_from_input(input)
+# elsif files_from_argument.empty? && l_option == true
+#   input = $stdin.read
+#   WordCountFromInput.line(input)
+# elsif files_from_argument.empty? == false && l_option == false
+#   WordCount.full_information(files_from_argument)
+# else
+#   WordCount.lines_only(files_from_argument)
+# end
+
+input = $stdin.read
+WordCountFromInput.full_from_input(input, l_option)
+
