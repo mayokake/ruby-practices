@@ -9,19 +9,9 @@ files = Dir.glob('*').filter_map { |string| string if File.stat(string).ftype ==
 files_from_argument = ARGV.select { |string| files.include?(string) }
 
 class WordCount
-  def self.full_information(array)
-    word_count = WordCount.new(array)
+  def self.full_information(array, option)
+    word_count = WordCount.new(array, option)
     word_count.full_information
-  end
-
-  def self.lines_only(array)
-    line_in_word_count = WordCount.new(array)
-    line_in_word_count.lines_only
-  end
-
-  def initialize(array)
-    @array = array
-    @array_file_read = @array.map { |string| File.read(string) }
   end
 
   def full_information
@@ -32,33 +22,36 @@ class WordCount
     total if @array_file_read.size != 1
   end
 
-  def lines_only
-    @array_file_read.each.with_index do |string, i|
-      only_lines(string)
-      puts " " + @array[i]
-    end
-    total_lines_only if @array_file_read.size != 1
+  def initialize(array, option)
+    @array = array
+    @option = option
+    @array_file_read = @array.map { |string| File.read(string) }
   end
 
   private
 
   def merge_information(string)
-    lines = lines_number(string).to_s.rjust(8)
-    words = words(string).to_s.rjust(8)
-    bytes = bytes(string).to_s.rjust(8)
-    print "#{lines}#{words}#{bytes}"
+    if @option == true
+      lines = lines_number(string).to_s.rjust(8)
+      print "#{lines}"
+    else
+      lines = lines_number(string).to_s.rjust(8)
+      words = words(string).to_s.rjust(8)
+      bytes = bytes(string).to_s.rjust(8)
+      print "#{lines}#{words}#{bytes}"
+    end
   end
 
   def total
-    lines = lines_number_sum.to_s.rjust(8)
-    words = words_sum.to_s.rjust(8)
-    bytes = bytes_sum.to_s.rjust(8)
-    puts "#{lines}#{words}#{bytes} total"
-  end
-
-  def total_lines_only
-    lines = lines_number_sum.to_s.rjust(8)
-    puts "#{lines} total"
+    if @option == true
+      lines = lines_number_sum.to_s.rjust(8)
+      puts "#{lines} total"
+    else
+      lines = lines_number_sum.to_s.rjust(8)
+      words = words_sum.to_s.rjust(8)
+      bytes = bytes_sum.to_s.rjust(8)
+      puts "#{lines}#{words}#{bytes} total"
+    end
   end
 
   def lines_number(string)
@@ -86,11 +79,6 @@ class WordCount
   def bytes_sum
     num = @array_file_read.map { |string| bytes(string) }
     num.sum
-  end
-
-  def only_lines(input)
-    lines = lines_number(input)
-    print lines.to_s.rjust(8)
   end
 end
 
@@ -132,17 +120,17 @@ class WordCountFromInput
   end
 end
 
-# if files_from_argument.empty? && l_option == false
-#   input = $stdin.read
-#   WordCountFromInput.full_from_input(input)
-# elsif files_from_argument.empty? && l_option == true
-#   input = $stdin.read
-#   WordCountFromInput.line(input)
-# elsif files_from_argument.empty? == false && l_option == false
-#   WordCount.full_information(files_from_argument)
-# else
-#   WordCount.lines_only(files_from_argument)
-# end
+if files_from_argument.empty? && l_option == false
+  input = $stdin.read
+  WordCountFromInput.full_from_input(input)
+elsif files_from_argument.empty? && l_option == true
+  input = $stdin.read
+  WordCountFromInput.line(input)
+elsif files_from_argument.empty? == false && l_option == false
+  WordCount.full_information(files_from_argument)
+else
+  WordCount.lines_only(files_from_argument)
+end
 
 input = $stdin.read
 WordCountFromInput.full_from_input(input, l_option)
