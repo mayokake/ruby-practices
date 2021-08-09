@@ -17,7 +17,7 @@ class WordCount
   def full_information
     @array_file_read.each.with_index do |string, i|
       merge_information(string)
-      puts " " + @array[i]
+      puts " #{@array[i]}"
     end
     total if @array_file_read.size != 1
   end
@@ -31,11 +31,10 @@ class WordCount
   private
 
   def merge_information(string)
+    lines = lines_number(string).to_s.rjust(8)
     if @option == true
-      lines = lines_number(string).to_s.rjust(8)
-      print "#{lines}"
+      print lines.to_s
     else
-      lines = lines_number(string).to_s.rjust(8)
       words = words(string).to_s.rjust(8)
       bytes = bytes(string).to_s.rjust(8)
       print "#{lines}#{words}#{bytes}"
@@ -43,11 +42,10 @@ class WordCount
   end
 
   def total
+    lines = lines_number_sum.to_s.rjust(8)
     if @option == true
-      lines = lines_number_sum.to_s.rjust(8)
       puts "#{lines} total"
     else
-      lines = lines_number_sum.to_s.rjust(8)
       words = words_sum.to_s.rjust(8)
       bytes = bytes_sum.to_s.rjust(8)
       puts "#{lines}#{words}#{bytes} total"
@@ -89,11 +87,10 @@ class WordCountFromInput
   end
 
   def full_from_input
+    lines = line.to_s.rjust(8)
     if @option == true
-      lines = line.to_s.rjust(8)
-      puts "#{lines}"
+      puts lines.to_s
     else
-      lines = line.to_s.rjust(8)
       words = word.to_s.rjust(8)
       bytes = byte.to_s.rjust(8)
       puts "#{lines}#{words}#{bytes}"
