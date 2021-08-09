@@ -120,18 +120,9 @@ class WordCountFromInput
   end
 end
 
-if files_from_argument.empty? && l_option == false
+if files_from_argument.empty?
   input = $stdin.read
-  WordCountFromInput.full_from_input(input)
-elsif files_from_argument.empty? && l_option == true
-  input = $stdin.read
-  WordCountFromInput.line(input)
-elsif files_from_argument.empty? == false && l_option == false
-  WordCount.full_information(files_from_argument)
+  WordCountFromInput.full_from_input(input, l_option)
 else
-  WordCount.lines_only(files_from_argument)
+  WordCount.full_information(files_from_argument, l_option)
 end
-
-input = $stdin.read
-WordCountFromInput.full_from_input(input, l_option)
-
