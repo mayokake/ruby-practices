@@ -9,12 +9,12 @@ files = Dir.glob('*').filter_map { |string| string if File.stat(string).ftype ==
 files_from_argument = ARGV.select { |string| files.include?(string) }
 
 class WordCount
-  def self.full_information(array, option)
+  def self.informations(array, option)
     word_count = WordCount.new(array, option)
-    word_count.full_information
+    word_count.informations
   end
 
-  def full_information
+  def informations
     @array_file_read.each.with_index do |string, i|
       merge_information(string)
       puts " #{@array[i]}"
@@ -80,13 +80,13 @@ class WordCount
   end
 end
 
-class WordCountFromInput
-  def self.full_from_input(input, option)
-    word_count_from_input = WordCountFromInput.new(input, option)
-    word_count_from_input.full_from_input
+class WordCountFromStdin
+  def self.info_from_stdin(input, option)
+    word_count_from_input = WordCountFromStdin.new(input, option)
+    word_count_from_input.info_from_stdin
   end
 
-  def full_from_input
+  def info_from_stdin
     lines = line.to_s.rjust(8)
     if @option == true
       puts lines.to_s
@@ -119,7 +119,7 @@ end
 
 if files_from_argument.empty?
   input = $stdin.read
-  WordCountFromInput.full_from_input(input, l_option)
+  WordCountFromStdin.info_from_stdin(input, l_option)
 else
-  WordCount.full_information(files_from_argument, l_option)
+  WordCount.informations(files_from_argument, l_option)
 end
