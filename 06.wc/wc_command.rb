@@ -25,7 +25,7 @@ class WordCount
   end
 
   def full_information
-    @array_file_read.map.with_index do |string, i|
+    @array_file_read.each.with_index do |string, i|
       merge_information(string)
       puts " #{file_name(@array[i])}"
     end
@@ -33,7 +33,7 @@ class WordCount
   end
 
   def lines_only
-    @array_file_read.map.with_index do |string, i|
+    @array_file_read.each.with_index do |string, i|
       only_lines(string)
       puts " #{file_name(@array[i])}"
     end
